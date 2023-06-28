@@ -6,53 +6,36 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
+import {TaskList} from '../../components/TaskList';
+import {useTaskList} from '../../context/TasksContext';
 
 export const Home = () => {
-  const [name, setName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [click, setClick] = useState(false);
+  const [newTask, setNewTask] = useState('');
+  const {addTask} = useTaskList();
 
-  const handleClick = () => {
-    setClick(true);
-  };
+  const handleAddNewTask = () => {
+    const data = {
+      id: String(new Date().getTime()),
+      title: newTask ? newTask : 'Task empty',
+    };
 
-  const handleClearInputs = () => {
-    setName('');
-    setLastName('');
-    setClick(false);
+    addTask(data);
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Nome</Text>
+      <Text style={styles.text}>Welcome, Dev!</Text>
       <TextInput
         placeholderTextColor={'#838689'}
-        placeholder="Digite seu nome..."
+        placeholder="Nova terefa..."
         style={styles.input}
-        onChangeText={text => setName(text)}
-        value={name}
+        onChangeText={setNewTask}
       />
-      <Text style={styles.text}>Sobrenome</Text>
-      <TextInput
-        placeholderTextColor={'#838689'}
-        placeholder="Digite seu sobrenome..."
-        style={styles.input}
-        onChangeText={text => setLastName(text)}
-        value={lastName}
-      />
-      <TouchableOpacity onPress={handleClick} style={styles.button}>
-        <Text style={styles.textButton}>Enviar</Text>
+      <TouchableOpacity onPress={handleAddNewTask} style={styles.button}>
+        <Text style={styles.textButton}>Adicionar</Text>
       </TouchableOpacity>
-      {click ? (
-        <Text style={styles.message}>
-          Seu nome é: {name} {lastName}
-        </Text>
-      ) : (
-        <Text style={styles.message}>Por favor, digite os campos acima!</Text>
-      )}
-      <TouchableOpacity onPress={handleClearInputs} style={styles.buttonClear}>
-        <Text style={styles.textClear}>Limpar Campos</Text>
-      </TouchableOpacity>
+      <Text style={styles.h1}>Minhas Tarefas</Text>
+      <TaskList />
     </View>
   );
 };
@@ -81,6 +64,13 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 
+  h1: {
+    color: '#fff',
+    fontSize: 25,
+    marginBottom: 10,
+    marginTop: 20,
+  },
+
   button: {
     width: '100%',
     marginTop: 15,
@@ -93,28 +83,6 @@ const styles = StyleSheet.create({
 
   textButton: {
     color: '#fff',
-    fontSize: 20,
-  },
-
-  message: {
-    color: '#fa3419',
-    fontSize: 20,
-    marginTop: 50,
-    textAlign: 'center',
-  },
-
-  buttonClear: {
-    width: '100%',
-    marginTop: 20,
-    backgroundColor: 'transparent',
-    borderRadius: 7,
-    height: 45,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-
-  textClear: {
-    color: '#0ccaba',
     fontSize: 20,
   },
 });
